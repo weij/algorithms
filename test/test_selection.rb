@@ -37,6 +37,33 @@ module Sorts
       collection
   end
 
+  def self.shellSort(collection)
+    size = collection.size
+    h = 1
+    while h <= size/3
+      h = h*3+1
+    end
+
+    while h >= 1
+      i = h
+      
+      while i < size
+
+        j = i
+        while j >= h and (collection[j] < collection[j-h])
+          collection[j], collection[j-h] = collection[j-h], collection[j]
+          j -= h
+        end
+
+        i += 1
+      end
+
+      h = h/3
+    end
+
+    collection
+  end
+
   def self.isSorted?(collection)
     collection.each_index do |i|
       return false if (i+1 < collection.size) and collection[i] > collection[i+1]
@@ -66,5 +93,11 @@ class TestSorts < Minitest::Test
   def test_isSorted_class_method
     refute Sorts.isSorted?(@a), "given array should be unsorted"
     assert Sorts.isSorted?(@sorted), "given array should be sorted"
+  end
+
+  def test_shellSort_class_method
+    d = %w{S H E L L S O R T E X A M P L E}
+    sorted = %w{A E E E H L L L M O P R S S T X}
+    assert_equal sorted, Sorts.shellSort(d)
   end
 end
