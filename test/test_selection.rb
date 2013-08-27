@@ -1,7 +1,7 @@
 
-module Selection
+module Sorts
 
-  def self.sort(collection)
+  def self.selectionSort(collection)
 
   	collection.each_index do |index|
       min = index #suppose index indicates the min element
@@ -18,6 +18,25 @@ module Selection
     collection
   end
 
+  def self.insertionSort(collection)
+      size = collection.size
+      
+      i = 1
+      while i < size 
+
+        j = i
+        while j > 0 and collection[j] < collection[j-1]
+          collection[j], collection[j-1] = collection[j-1], collection[j]
+
+          j -= 1
+        end
+
+        i += 1
+      end 
+
+      collection
+  end
+
   def self.isSorted?(collection)
     collection.each_index do |i|
       return false if (i+1 < collection.size) and collection[i] > collection[i+1]
@@ -29,20 +48,23 @@ end
 
 require 'minitest/autorun'
 
-class TestSelection < Minitest::Test
+class TestSorts < Minitest::Test
 
   def setup
     @a = %w{S O R T E X A M P L E}    
+    @sorted = %w{A E E L M O P R S T X}
   end
 
-  def test_sort_class_method
-    sorted_a = %w{A E E L M O P R S T X}
-    assert_equal sorted_a, Selection.sort(@a)
+  def test_selectionSort_class_method
+    assert_equal @sorted, Sorts.selectionSort(@a)
+  end
+
+  def test_insertionSort_class_method
+    assert_equal @sorted, Sorts.insertionSort(@a)
   end
 
   def test_isSorted_class_method
-    sorted = %w{A E E L M O P R S T X}
-    refute Selection.isSorted?(@a), "given array should be unsorted"
-    assert Selection.isSorted?(sorted), "given array should be sorted"
+    refute Sorts.isSorted?(@a), "given array should be unsorted"
+    assert Sorts.isSorted?(@sorted), "given array should be sorted"
   end
 end
