@@ -1,6 +1,9 @@
 
 module Sorts
 
+  # each_index(or variable i): presents a pointer/bound of sorted part
+  # variable j: presents a pointer/direction of scan
+  # variable min: presents a pointer of minimal element per scan
   def self.selectionSort(collection)
 
   	collection.each_index do |index|
@@ -18,6 +21,8 @@ module Sorts
     collection
   end
 
+  # variable i: presents a pointer of sorted part, and scan direction
+  # variable j: presents a pointer and direction of compare
   def self.insertionSort(collection)
       size = collection.size
       
@@ -27,7 +32,6 @@ module Sorts
         j = i
         while j > 0 and collection[j] < collection[j-1]
           collection[j], collection[j-1] = collection[j-1], collection[j]
-
           j -= 1
         end
 
@@ -37,6 +41,9 @@ module Sorts
       collection
   end
 
+  # variable h: increment sequence. (3^k-1)/2, for instance, 1, 4, 13, 40, 121, .. 
+  # variable i: presents a pointer of sorted part, and scan direction. Always start at i = h
+  # variable j: presents a pointer and direction of compare. Every comparing elements between h
   def self.shellSort(collection)
     size = collection.size
     h = 1
@@ -45,8 +52,8 @@ module Sorts
     end
 
     while h >= 1
-      i = h
-      
+
+      i = h     
       while i < size
 
         j = i
