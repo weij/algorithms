@@ -71,6 +71,34 @@ module Sorts
     collection
   end
 
+  def self.heapsort(collection)
+    size = collection.length-1
+    key = size/2
+    
+    while key >= 1
+      sink(collection, key, size)
+      key -=1
+    end
+    puts collection.inspect
+    while size > 1
+      collection[1], collection[size] = collection[size], collection[1]
+      size -=1
+      sink(collection, 1, size)
+    end
+
+    collection
+  end
+
+  def self.sink(collection, node, lastNode)
+    while 2*node <= lastNode 
+      j = 2*node
+      j +=1 if j < lastNode and collection[j] < collection[j+1]
+      break unless collection[node] < collection[j]
+      collection[node], collection[j] = collection[j], collection[node]
+      node = j
+    end 
+  end
+
   def self.isSorted?(collection)
     collection.each_index do |i|
       return false if (i+1 < collection.size) and collection[i] > collection[i+1]
@@ -87,6 +115,11 @@ class TestSorts < Minitest::Test
   def setup
     @a = %w{S O R T E X A M P L E}    
     @sorted = %w{A E E L M O P R S T X}
+  end
+   
+  def test_heapsort
+    @a.insert(0, nil)
+    assert_equal @sorted.insert(0, nil), Sorts.heapsort(@a)
   end
 
   def test_selectionSort_class_method
