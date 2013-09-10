@@ -76,10 +76,11 @@ module Sorts
     key = size/2
     
     while key >= 1
+      puts "sink(#{key}, #{size})"
       sink(collection, key, size)
       key -=1
     end
-    puts collection.inspect
+
     while size > 1
       collection[1], collection[size] = collection[size], collection[1]
       size -=1
@@ -89,13 +90,14 @@ module Sorts
     collection
   end
 
-  def self.sink(collection, node, lastNode)
-    while 2*node <= lastNode 
-      j = 2*node
-      j +=1 if j < lastNode and collection[j] < collection[j+1]
-      break unless collection[node] < collection[j]
-      collection[node], collection[j] = collection[j], collection[node]
-      node = j
+  def self.sink(collection, key, size)
+    while 2*key <= size 
+      j = 2*key
+      j +=1 if j < size and collection[j] < collection[j+1]
+      puts collection.inspect
+      break unless collection[key] < collection[j]
+      collection[key], collection[j] = collection[j], collection[key]
+      key = j
     end 
   end
 
