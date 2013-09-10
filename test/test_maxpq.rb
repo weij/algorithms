@@ -2,9 +2,9 @@
 class MaxPQ
 	
   # TODO: How to deal with various initialization options?	
-  def initialize(maxN=2)
-	@pq = Array.new(maxN+1)
-    @size = 0
+  def initialize(maxN=30)
+	  @pq = Array.new(maxN+1)
+    @size = 0 
   end
 
   def isEmpty?
@@ -90,12 +90,33 @@ class TestMaxpq < Minitest::Test
   def test_insert_operation
   	pq = MaxPQ.new(5)
   	assert pq.isEmpty?
-    ['S', 'P', 'R', 'G', 'T'].each {|key| pq.insert key; puts pq.inspect}
+    ['S', 'P', 'R', 'G', 'T'].each {|v| pq.insert v}
     assert_equal [nil, 'T', 'S', 'R', 'G', 'P'], pq.instance_variable_get(:@pq)
   	assert_equal 5, pq.size
   end 
 
-  def test_remove_the_maximum_operation
-  	
+  def test_exercise_2_4_1_that_combination_of_insert_and_remove
+  	seq = %w{P R I O * R * * I * T * Y * * * Q U E * * * U * E}
+    expected = %w{R R P O T Y I I U Q E U}
+    removed_max = []
+    seq.each do |value|
+
+       if value == '*'
+          removed_max << @maxpq.delMax 
+       else
+         @maxpq.insert(value)
+         puts @maxpq.inspect
+       end
+    end
+    
+    assert_equal expected, removed_max
   end
+
+  def test_exercise_2_4_5_that_insert_easyquestion_sequ
+    pq = MaxPQ.new(12)
+    %w{E A S Y Q U E S T I O N}.each {|value| pq.insert value} 
+    expected = %w{Y T U S Q N E A S I O E}.insert(0, nil)
+    assert_equal expected, pq.instance_variable_get(:@pq)
+  end
+
 end
