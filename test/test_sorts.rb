@@ -72,79 +72,79 @@ module IIDWorks
       collection
     end
   end
-end
-
-
-module Sorts
-
-
-  # variable h: increment sequence. (3^k-1)/2, for instance, 1, 4, 13, 40, 121, .. 
-  # variable i: presents a pointer of sorted part, and scan direction. Always start at i = h
-  # variable j: presents a pointer and direction of compare. Every comparing elements between h
-  def self.shellSort(collection)
-    size = collection.size
-    h = 1
-    while h <= size/3
-      h = h*3+1
-    end
-
-    while h >= 1
-
-      i = h     
-      while i < size
-
-        j = i
-        while j >= h and (collection[j] < collection[j-h])
-          collection[j], collection[j-h] = collection[j-h], collection[j]
-          j -= h
-        end
-
-        i += 1
+  
+  module ShellSort
+    # variable h: increment sequence. (3^k-1)/2, for instance, 1, 4, 13, 40, 121, .. 
+    # variable i: presents a pointer of sorted part, and scan direction. Always start at i = h
+    # variable j: presents a pointer and direction of compare. Every comparing elements between h
+    def self.sort(collection)
+      size = collection.size
+      h = 1
+      while h <= size/3
+        h = h*3+1
       end
-
-      h = h/3
-    end
-
-    collection
+  
+      while h >= 1
+  
+        i = h     
+        while i < size
+  
+          j = i
+          while j >= h and (collection[j] < collection[j-h])
+            collection[j], collection[j-h] = collection[j-h], collection[j]
+            j -= h
+          end
+  
+          i += 1
+        end
+  
+        h = h/3
+      end
+  
+      collection
+    end     
   end
 
-  def self.heapsort(collection)
-    size = collection.length-1
-    key = size/2
-    
-    while key >= 1
-      # puts "sink(#{key}, #{size})"
-      sink(collection, key, size)
-      key -=1
+  module HeapSort 
+    def self.sort(collection)
+      size = collection.length-1
+      key = size/2
+      
+      while key >= 1
+        # puts "sink(#{key}, #{size})"
+        sink(collection, key, size)
+        key -=1
+      end
+  
+      while size > 1
+        collection[1], collection[size] = collection[size], collection[1]
+        size -=1
+        sink(collection, 1, size)
+      end
+  
+      collection
     end
-
-    while size > 1
-      collection[1], collection[size] = collection[size], collection[1]
-      size -=1
-      sink(collection, 1, size)
+  
+    def self.sink(collection, key, size)
+      while 2*key <= size 
+        j = 2*key
+        j +=1 if j < size and collection[j] < collection[j+1]
+        # puts collection.inspect
+        break unless collection[key] < collection[j]
+        collection[key], collection[j] = collection[j], collection[key]
+        key = j
+      end 
     end
-
-    collection
-  end
-
-  def self.sink(collection, key, size)
-    while 2*key <= size 
-      j = 2*key
-      j +=1 if j < size and collection[j] < collection[j+1]
-      # puts collection.inspect
-      break unless collection[key] < collection[j]
-      collection[key], collection[j] = collection[j], collection[key]
-      key = j
-    end 
-  end
-
-  def self.isSorted?(collection)
-    collection.each_index do |i|
-      return false if (i+1 < collection.size) and collection[i] > collection[i+1]
+  
+    def self.isSorted?(collection)
+      collection.each_index do |i|
+        return false if (i+1 < collection.size) and collection[i] > collection[i+1]
+      end
+      return true
     end
-    return true
-  end
+  end 
 end
+
 
 
 require 'minitest/autorun'
@@ -158,7 +158,7 @@ class TestSorts < Minitest::Test
    
   def test_heapsort
     @a.insert(0, nil)
-    assert_equal @sorted.insert(0, nil), Sorts.heapsort(@a)
+    assert_equal @sorted.insert(0, nil), IIDWorks::HeapSort.sort(@a)
   end
 
   def test_selectionSort_class_method
@@ -174,13 +174,13 @@ class TestSorts < Minitest::Test
   end
 
   def test_isSorted_class_method
-    refute Sorts.isSorted?(@a), "given array should be unsorted"
-    assert Sorts.isSorted?(@sorted), "given array should be sorted"
+    refute IIDWorks::HeapSort.isSorted?(@a), "given array should be unsorted"
+    assert IIDWorks::HeapSort.isSorted?(@sorted), "given array should be sorted"
   end
 
   def test_shellSort_class_method
     d = %w{S H E L L S O R T E X A M P L E}
     sorted = %w{A E E E H L L L M O P R S S T X}
-    assert_equal sorted, Sorts.shellSort(d)
+    assert_equal sorted, IIDWorks::ShellSort.sort(d)
   end
 end
