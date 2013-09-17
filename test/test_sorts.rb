@@ -50,30 +50,33 @@ module IIDWorks
       collection
     end    
   end
+
+  module SelectionSort
+    # each_index(or variable i): presents a pointer/bound of sorted part
+    # variable j: presents a pointer/direction of scan
+    # variable min: presents a pointer of minimal element per scan
+    def self.sort(collection)
+  
+      collection.each_index do |index|
+        min = index #suppose index indicates the min element
+        j = index + 1
+  
+        while j < collection.size do
+          min = j if collection[j] < collection[min]
+          j += 1
+        end
+  
+        collection[index], collection[min] = collection[min], collection[index]
+      end
+  
+      collection
+    end
+  end
 end
 
 
 module Sorts
 
-  # each_index(or variable i): presents a pointer/bound of sorted part
-  # variable j: presents a pointer/direction of scan
-  # variable min: presents a pointer of minimal element per scan
-  def self.selectionSort(collection)
-
-  	collection.each_index do |index|
-      min = index #suppose index indicates the min element
-      j = index + 1
-
-      while j < collection.size do
-      	min = j if collection[j] < collection[min]
-      	j += 1
-      end
-
-      collection[index], collection[min] = collection[min], collection[index]
-  	end
-
-    collection
-  end
 
   # variable h: increment sequence. (3^k-1)/2, for instance, 1, 4, 13, 40, 121, .. 
   # variable i: presents a pointer of sorted part, and scan direction. Always start at i = h
@@ -159,7 +162,7 @@ class TestSorts < Minitest::Test
   end
 
   def test_selectionSort_class_method
-    assert_equal @sorted, Sorts.selectionSort(@a)
+    assert_equal @sorted, IIDWorks::SelectionSort.sort(@a)
   end
 
   def test_insertionSort_exchange_one_by_one_impl
