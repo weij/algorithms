@@ -1,4 +1,54 @@
 
+module IIDWorks
+  module InsertionSort
+    def self.sort(collection, impl: :exchange_one_by_one)
+      case :impl
+      when :without_exchange
+        return without_exchange(collection)
+      else 
+        return exchange_one_by_one(collection)
+      end
+    end
+    
+    def self.without_exchange(collection)
+      size = collection.size
+      j = 1
+      while j < size
+        
+        key = collection[j]
+        i = j-1
+        while i >= 0 and collection[i] > key
+          collection[i+1] = collection[i]
+          i -=1
+          # iputs collection.inspect
+        end
+        collection[i+1] = key
+        j +=1
+      end
+      collection
+    end
+
+    # variable i: presents a pointer of sorted part, and scan direction
+    # variable j: presents a pointer and direction of compare
+    def self.exchange_one_by_one(collection)
+      size = collection.size
+      
+      i = 1
+      while i < size 
+        j = i
+        while j > 0 and collection[j] < collection[j-1]
+          collection[j], collection[j-1] = collection[j-1], collection[j]
+          j -= 1
+          puts collection.inspect
+        end
+        i += 1
+      end 
+      collection
+    end    
+  end
+end
+
+
 module Sorts
 
   # each_index(or variable i): presents a pointer/bound of sorted part
@@ -19,26 +69,6 @@ module Sorts
   	end
 
     collection
-  end
-
-  # variable i: presents a pointer of sorted part, and scan direction
-  # variable j: presents a pointer and direction of compare
-  def self.insertionSort(collection)
-      size = collection.size
-      
-      i = 1
-      while i < size 
-
-        j = i
-        while j > 0 and collection[j] < collection[j-1]
-          collection[j], collection[j-1] = collection[j-1], collection[j]
-          j -= 1
-        end
-
-        i += 1
-      end 
-
-      collection
   end
 
   # variable h: increment sequence. (3^k-1)/2, for instance, 1, 4, 13, 40, 121, .. 
@@ -76,7 +106,7 @@ module Sorts
     key = size/2
     
     while key >= 1
-      puts "sink(#{key}, #{size})"
+      # puts "sink(#{key}, #{size})"
       sink(collection, key, size)
       key -=1
     end
@@ -94,7 +124,7 @@ module Sorts
     while 2*key <= size 
       j = 2*key
       j +=1 if j < size and collection[j] < collection[j+1]
-      puts collection.inspect
+      # puts collection.inspect
       break unless collection[key] < collection[j]
       collection[key], collection[j] = collection[j], collection[key]
       key = j
@@ -128,8 +158,12 @@ class TestSorts < Minitest::Test
     assert_equal @sorted, Sorts.selectionSort(@a)
   end
 
-  def test_insertionSort_class_method
-    assert_equal @sorted, Sorts.insertionSort(@a)
+  def test_insertionSort_exchange_one_by_one_impl
+    assert_equal @sorted, IIDWorks::InsertionSort.sort(@a)
+  end
+
+  def test_InsertionSort_without_exchange_impl
+    assert_equal @sorted, IIDWorks::InsertionSort.sort(@a, impl: :without_exchange)
   end
 
   def test_isSorted_class_method
