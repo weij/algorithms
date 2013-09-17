@@ -10,6 +10,10 @@ module IIDWorks
       end
     end
     
+    # This impl moves larger elements to the right one position with one array access per entry,
+    # rather than using exchange.
+    # var i: indicates compare direction
+    # var j: indicates scan direction
     def self.without_exchange(collection)
       size = collection.size
       j = 1
