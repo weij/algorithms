@@ -1,7 +1,6 @@
 module IIDWorks
   module QuickSort
-	def self.sort_internal(collection, lo, hi)
-	  cutoff = 5
+	def self.sort_internal(collection, lo, hi, cutoff: 5)
 	  return insertion_sort(collection, lo, hi) if hi <= lo + cutoff
 	  j = partition(collection, lo, hi)
       sort_internal(collection, lo, j-1)
@@ -57,6 +56,7 @@ module IIDWorks
 end
 
 require 'minitest/autorun'
+require 'benchmark'
 
 class TestQuickSort < Minitest::Test
 
@@ -70,5 +70,25 @@ class TestQuickSort < Minitest::Test
   	quicksort_example = %w{Q U I C K S O R T E X A M P L E}
     sorted = %w{A C E E I K L M O P Q R S T U X} 
     assert_equal sorted, IIDWorks::QuickSort.sort_internal(quicksort_example, 0, 15)          
+  end
+
+  def test_exercise_2_3_25
+    a = Array.new(10**4) { rand }
+    a1 = a.clone
+    # a2 = a.dup
+
+    Benchmark.bmbm do |bm|
+      bm.report do
+        100.times do
+      	  IIDWorks::QuickSort.sort_internal(a, 0, a.size-1)
+        end
+      end	
+
+      bm.report do
+      	100.times do 
+          IIDWorks::QuickSort.sort_internal(a1, 0, a1.size-1, cutoff: 10)
+      	end
+      end
+    end 
   end
 end
