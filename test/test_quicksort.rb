@@ -56,7 +56,7 @@ module IIDWorks
 end
 
 require 'minitest/autorun'
-require 'benchmark'
+require 'minitest/benchmark'
 
 class TestQuickSort < Minitest::Test
 
@@ -72,23 +72,20 @@ class TestQuickSort < Minitest::Test
     assert_equal sorted, IIDWorks::QuickSort.sort_internal(quicksort_example, 0, 15)          
   end
 
-  def test_exercise_2_3_25
-    a = Array.new(10**4) { rand }
-    a1 = a.clone
-    # a2 = a.dup
+end
 
-    Benchmark.bmbm do |bm|
-      bm.report do
-        100.times do
-      	  IIDWorks::QuickSort.sort_internal(a, 0, a.size-1)
-        end
-      end	
+class BenchQuickSort < Minitest::Benchmark
 
-      bm.report do
-      	100.times do 
-          IIDWorks::QuickSort.sort_internal(a1, 0, a1.size-1, cutoff: 10)
-      	end
-      end
-    end 
-  end
+  def bench_cutoff_algorithm 
+  	assert_performance_linear 0.99 do |n|
+  	  a = Array.new(n) { rand }
+  	  IIDWorks::QuickSort.sort_internal(a, 0, a.size-1)
+    end
+
+  	assert_performance_linear 0.99 do |n|
+  	  a = Array.new(n) { rand }
+  	  IIDWorks::QuickSort.sort_internal(a, 0, a.size-1, cutoff: 10)
+    end    
+  end 
+
 end
