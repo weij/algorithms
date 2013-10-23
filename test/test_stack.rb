@@ -1,4 +1,4 @@
-class FixedCapacityStackOfStrings
+class FixedCapacityStack
   
   attr_reader :entries, :size
 
