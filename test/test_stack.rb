@@ -28,7 +28,7 @@ require 'minitest/autorun'
 class TestStack < Minitest::Test
 
   def test_read_a_sequence
-  	s = FixedCapacityStackOfStrings.new(100)
+  	s = FixedCapacityStack.new(100)
 
   	%w{to be or not to - be - - that - - - is}.each do |item|
       if !(item == "-") 
