@@ -53,7 +53,6 @@ module IIDWorks
 
     def resize(max)
       temp = Array.new(max)
-      # puts size
       for i in 0...size do
         temp[i] = @entries[i]
       end
