@@ -18,4 +18,20 @@ class TestStack < Minitest::Test
     assert_equal 2, s.size
   end
 
+
+  def test_resize_when_capacity_reach_the_ceiling
+    s = IIDWorks::ResizingArrayStack.new(10)
+    (0..10).each {|e| s.push(e)}
+    assert_equal 20, s.entries.size
+  end
+
+  def test_resize_if_capacity_reach_one_quarter
+    s1 = IIDWorks::ResizingArrayStack.new(10)
+    (1..9).each {|e| s1.push(e)}
+    assert_equal 9, s1.size
+    8.times {s1.pop }
+    assert_equal 1, s1.size
+    # puts s1.entries
+    assert_equal 2, s1.entries.size
+  end
 end
