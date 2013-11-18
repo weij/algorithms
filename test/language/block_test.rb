@@ -61,4 +61,21 @@ describe 'Ruby Block' do
   	eg = BlockExample.new
   	eg.fib_up_to(5) { |f| print f}.must_equal [1,1,2,3,5]
   end
+
+  describe 'the common iterators:' do
+  	it 'find iterator works' do
+  	  [1,3,7,9].find {|v| v*v > 30}.must_equal 7
+  	end
+
+  	it 'map/collect iterator works' do
+  	  [1,3,7,9].map {|v| v*v }.must_equal [1, 9, 49, 81]
+  	end
+
+  	it 'inject iterator works' do
+  	  [1,3,7,9].inject {|result, value| result + value}.must_equal 20
+  	  [1,3,7,9].inject(:+).must_equal 20
+  	  [1,3,7,9].inject {|result, value| result * value}.must_equal 189
+  	end
+  
+  end
 end
